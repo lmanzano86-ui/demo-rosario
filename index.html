@@ -132,6 +132,20 @@ h1,h2{font-family:var(--serif);font-weight:600;line-height:1.08}
 .form-lista input{flex:1;min-width:250px;background:var(--crema);border:1px solid var(--dorado);color:var(--tinta);font:inherit;padding:14px 16px;border-radius:2px}
 .lista .gracias{background:rgba(244,236,220,.08)}
 
+
+/* ---------- Contáctanos ---------- */
+.contacto{background:var(--noche)}
+.contacto h2{font-size:40px;font-size:clamp(30px,5vw,44px);color:#fff;text-align:center;margin:10px 0 8px}
+.contacto .sub{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--dorado-claro);text-align:center;margin-bottom:36px}
+.form-contacto{max-width:620px;margin:0 auto;text-align:left}
+.form-contacto label{display:block;font-size:11px;font-weight:800;letter-spacing:.26em;text-transform:uppercase;color:var(--dorado-claro);margin:20px 0 8px}
+.form-contacto input[type="text"],.form-contacto input[type="email"],.form-contacto textarea{width:100%;background:rgba(244,236,220,.06);border:1px solid rgba(244,236,220,.45);color:var(--crema);font:inherit;padding:14px 16px;border-radius:2px}
+.form-contacto textarea{min-height:130px;resize:vertical}
+.form-contacto .optin{display:flex;gap:12px;align-items:flex-start;margin:22px 0 26px;font-size:14.5px;color:#D9CCAF;text-transform:none;letter-spacing:0;font-weight:400}
+.form-contacto .optin input{width:19px;height:19px;margin-top:3px;accent-color:var(--dorado);flex:none}
+.form-contacto .btn{width:100%;text-align:center}
+.contacto .gracias{background:rgba(244,236,220,.08)}
+
 /* ---------- Pie ---------- */
 footer{background:#150D07;padding:70px 24px 34px}
 .pie-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:36px;max-width:1080px;margin:0 auto}
@@ -158,6 +172,7 @@ footer a:hover{color:var(--dorado-claro)}
     <a href="#menus" data-es="Menús" data-en="Menus">Menús</a>
     <a href="#eventos" data-es="Eventos" data-en="Events">Eventos</a>
     <a href="#club" data-es="Club" data-en="Club">Club</a>
+    <a href="#contacto" data-es="Contacto" data-en="Contact">Contacto</a>
     <a class="btn btn-accion" href="#reservas" data-es="Reservar" data-en="Book a Table">Reservar</a>
     <button class="idioma" id="btnIdioma" type="button" aria-label="Cambiar idioma / Switch language">EN</button>
   </nav>
@@ -322,6 +337,29 @@ footer a:hover{color:var(--dorado-claro)}
   </div>
 </section>
 
+
+<!-- CONTÁCTANOS -->
+<section class="seccion contacto" id="contacto">
+  <div class="contenedor">
+    <p class="sobre" data-es="Estamos para ti" data-en="We Are Here for You">Estamos para ti</p>
+    <h2 data-es="Contáctanos" data-en="Contact Us">Contáctanos</h2>
+    <p class="sub" data-es="¡Escríbenos!" data-en="Drop us a line!">¡Escríbenos!</p>
+    <form class="form-contacto" id="formContacto">
+      <label for="ct-nombre" data-es="Nombre" data-en="Name">Nombre</label>
+      <input type="text" id="ct-nombre" name="nombre" autocomplete="name">
+      <label for="ct-correo"><span data-es="Correo electrónico" data-en="Email">Correo electrónico</span> *</label>
+      <input type="email" id="ct-correo" name="correo" required autocomplete="email">
+      <label for="ct-mensaje" data-es="Mensaje" data-en="Message">Mensaje</label>
+      <textarea id="ct-mensaje" name="mensaje"></textarea>
+      <label class="optin"><input type="checkbox" name="lista" checked> <span data-es="Quiero suscribirme a su lista de correo para recibir novedades, promociones y más." data-en="Sign up for our email list for updates, promotions, and more.">Quiero suscribirme a su lista de correo para recibir novedades, promociones y más.</span></label>
+      <button class="btn btn-accion" type="submit" data-es="Enviar" data-en="Send">Enviar</button>
+    </form>
+    <div class="gracias" id="graciasContacto" role="status">
+      <p data-es="¡Mensaje recibido! Te respondemos muy pronto." data-en="Message received! We will get back to you very soon.">¡Mensaje recibido! Te respondemos muy pronto.</p>
+    </div>
+  </div>
+</section>
+
 <!-- PIE -->
 <footer>
   <div class="pie-cols">
@@ -377,6 +415,7 @@ footer a:hover{color:var(--dorado-claro)}
   }
   gracias('formReserva','graciasReserva');
   gracias('formLista','graciasLista');
+  gracias('formContacto','graciasContacto');
 
   // Idioma ES/EN
   var lang=localStorage.getItem('rosario-lang')||'es';
