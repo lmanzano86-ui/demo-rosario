@@ -510,10 +510,12 @@ body{padding-bottom:82px}
   function mc(){ return document.getElementById('modalContacto'); }
   function abrirContacto(){ var m=mc(); if(m){ m.hidden=false; document.body.style.overflow='hidden'; } }
   function cerrarContactoFn(){ var m=mc(); if(m){ m.hidden=true; document.body.style.overflow=''; } }
-  document.addEventListener('click',function(e){ var a=e.target.closest('a[href="#contacto"]'); if(a){ e.preventDefault(); cerrarPanelSiAbierto(); abrirContacto(); } });
-  var btnCerrarC=document.getElementById('cerrarContacto');
-  if(btnCerrarC) btnCerrarC.addEventListener('click',cerrarContactoFn);
-  var mEl=mc(); if(mEl) mEl.addEventListener('click',function(e){ if(e.target===mEl) cerrarContactoFn(); });
+  document.addEventListener('click',function(e){
+    if(e.target && e.target.id==='cerrarContacto'){ cerrarContactoFn(); return; }
+    var mm=mc(); if(mm && e.target===mm){ cerrarContactoFn(); return; }
+    var a=e.target.closest ? e.target.closest('a[href="#contacto"]') : null;
+    if(a){ e.preventDefault(); cerrarPanelSiAbierto(); abrirContacto(); }
+  });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') cerrarContactoFn(); });
   function cerrarPanelSiAbierto(){ var p=document.getElementById('panelMovil'); if(p && p.classList.contains('abierto')){ p.classList.remove('abierto'); } }
   var tabs=document.querySelectorAll('.pestanas [role="tab"]');
