@@ -156,11 +156,9 @@ h1,h2{font-family:var(--serif);font-weight:600;line-height:1.08}
 .contacto{background:var(--noche)}
 .contacto h2{font-size:40px;font-size:clamp(30px,5vw,44px);color:#fff;text-align:center;margin:10px 0 8px}
 .contacto .sub{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--dorado-claro);text-align:center;margin-bottom:36px}
-.contacto .tel-contacto{text-align:center;margin:-16px 0 30px;font-size:17px;color:#D9CCAF}
-.contacto .tel-contacto a{color:var(--dorado-claro);font-weight:700;text-decoration:none;letter-spacing:.04em}
 .form-contacto{max-width:620px;margin:0 auto;text-align:left}
 .form-contacto label{display:block;font-size:11px;font-weight:800;letter-spacing:.26em;text-transform:uppercase;color:var(--dorado-claro);margin:20px 0 8px}
-.form-contacto input[type="text"],.form-contacto input[type="email"],.form-contacto textarea{width:100%;background:rgba(244,236,220,.06);border:1px solid rgba(244,236,220,.45);color:var(--crema);font:inherit;padding:14px 16px;border-radius:2px}
+.form-contacto input[type="text"],.form-contacto input[type="email"],.form-contacto input[type="tel"],.form-contacto textarea{width:100%;background:rgba(244,236,220,.06);border:1px solid rgba(244,236,220,.45);color:var(--crema);font:inherit;padding:14px 16px;border-radius:2px}
 .form-contacto textarea{min-height:130px;resize:vertical}
 .form-contacto .optin{display:flex;gap:12px;align-items:flex-start;margin:22px 0 26px;font-size:14.5px;color:#D9CCAF;text-transform:none;letter-spacing:0;font-weight:400}
 .form-contacto .optin input{width:19px;height:19px;margin-top:3px;accent-color:var(--dorado);flex:none}
@@ -610,12 +608,13 @@ body{padding-bottom:58px}
     <p class="sobre" data-es="Estamos para ti" data-en="We Are Here for You">Estamos para ti</p>
     <h2 data-es="Contáctanos" data-en="Contact Us">Contáctanos</h2>
     <p class="sub" data-es="¡Escríbenos!" data-en="Drop us a line!">¡Escríbenos!</p>
-    <p class="tel-contacto"><span data-es="O llámanos al" data-en="Or call us at">O llámanos al</span> <a href="tel:+18132845154">(813) 284-5154</a></p>
     <form class="form-contacto" id="formContacto">
       <label for="ct-nombre" data-es="Nombre" data-en="Name">Nombre</label>
       <input type="text" id="ct-nombre" name="nombre" autocomplete="name">
       <label for="ct-correo"><span data-es="Correo electrónico" data-en="Email">Correo electrónico</span> *</label>
       <input type="email" id="ct-correo" name="correo" required autocomplete="email">
+      <label for="ct-telefono" data-es="Teléfono" data-en="Phone">Teléfono</label>
+      <input type="tel" id="ct-telefono" name="telefono" autocomplete="tel">
       <label for="ct-mensaje" data-es="Mensaje" data-en="Message">Mensaje</label>
       <textarea id="ct-mensaje" name="mensaje"></textarea>
       <label class="optin"><input type="checkbox" name="lista" checked> <span data-es="Quiero suscribirme a su lista de correo para recibir novedades, promociones y más." data-en="Sign up for our email list for updates, promotions, and more.">Quiero suscribirme a su lista de correo para recibir novedades, promociones y más.</span></label>
