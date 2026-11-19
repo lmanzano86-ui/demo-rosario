@@ -178,6 +178,9 @@ footer a:hover{color:var(--dorado-claro)}
 .llamar-flotante{position:fixed;right:18px;bottom:18px;z-index:55;background:var(--dorado);color:#fff;text-decoration:none;font-weight:800;font-size:13px;letter-spacing:.08em;padding:14px 20px;border-radius:999px;box-shadow:0 10px 26px rgba(0,0,0,.45)}
 
 /* ---------- Barra inferior fija (como la del referente) ---------- */
+.nav .enlaces a.activa{color:var(--dorado-claro)}
+.panel-movil a.activa{color:var(--dorado-claro)}
+.barra-inferior .enlaces-barra a.activa{color:var(--dorado-claro)}
 .barra-copy a{color:var(--dorado-claro);text-decoration:none;font-weight:600}
 .barra-copy a:hover{text-decoration:underline}
 .barra-copy{position:fixed;left:0;right:0;bottom:0;z-index:58;background:#171310;color:#9A8B74;text-align:center;font-size:10.5px;letter-spacing:.05em;padding:5px 12px;border-top:1px solid rgba(244,236,220,.08)}
@@ -518,6 +521,25 @@ body{padding-bottom:82px}
   });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') cerrarContactoFn(); });
   function cerrarPanelSiAbierto(){ var p=document.getElementById('panelMovil'); if(p && p.classList.contains('abierto')){ p.classList.remove('abierto'); } }
+
+  // La categoría seleccionada se queda dorada en las barras (no solo al pasar por encima)
+  function marcarActiva(hash){
+    document.querySelectorAll('.nav .enlaces a[href^="#"], .panel-movil a[href^="#"], .barra-inferior .enlaces-barra a[href^="#"]').forEach(function(a){
+      a.classList.toggle('activa', a.getAttribute('href')===hash);
+    });
+  }
+  document.addEventListener('click',function(e){
+    var a=e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    if(a && a.closest('.nav,.panel-movil,.barra-inferior')){ marcarActiva(a.getAttribute('href')); }
+  });
+  if('IntersectionObserver' in window){
+    var observador=new IntersectionObserver(function(entradas){
+      entradas.forEach(function(en){ if(en.isIntersecting){ marcarActiva('#'+en.target.id); } });
+    },{rootMargin:'-40% 0px -55% 0px'});
+    ['horario','menus','reservas','eventos','club','lista'].forEach(function(id){
+      var sec=document.getElementById(id); if(sec) observador.observe(sec);
+    });
+  }
   var tabs=document.querySelectorAll('.pestanas [role="tab"]');
   tabs.forEach(function(t){
     t.addEventListener('click', function(){
