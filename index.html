@@ -211,6 +211,13 @@ body{padding-bottom:58px}
 #cartaPanel{display:none}
 #cartaPanel.visible{display:block;animation:apareceCarta .6s ease}
 @keyframes apareceCarta{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+/* ---------- Contacto como ventana desde las barras (no va en la página) ---------- */
+.modal-contacto{position:fixed;inset:0;z-index:95;background:rgba(15,9,5,.8);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:30px 14px 90px}
+.modal-contacto[hidden]{display:none}
+.modal-caja{position:relative;width:100%;max-width:760px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.modal-caja .contacto{padding:48px 30px 44px}
+.modal-x{position:absolute;top:8px;right:12px;z-index:2;background:none;border:none;color:var(--crema);font-size:30px;line-height:1;cursor:pointer;padding:8px}
 @media print{ .nav,.llamar-flotante{display:none} .hero{min-height:auto;padding:60px 24px} .hero h1{font-size:56px} }
 </style>
 </head>
@@ -465,26 +472,6 @@ body{padding-bottom:58px}
 
 
 <!-- CONTÁCTANOS -->
-<section class="seccion contacto" id="contacto">
-  <div class="contenedor">
-    <p class="sobre" data-es="Estamos para ti" data-en="We Are Here for You">Estamos para ti</p>
-    <h2 data-es="Contáctanos" data-en="Contact Us">Contáctanos</h2>
-    <p class="sub" data-es="¡Escríbenos!" data-en="Drop us a line!">¡Escríbenos!</p>
-    <form class="form-contacto" id="formContacto">
-      <label for="ct-nombre" data-es="Nombre" data-en="Name">Nombre</label>
-      <input type="text" id="ct-nombre" name="nombre" autocomplete="name">
-      <label for="ct-correo"><span data-es="Correo electrónico" data-en="Email">Correo electrónico</span> *</label>
-      <input type="email" id="ct-correo" name="correo" required autocomplete="email">
-      <label for="ct-mensaje" data-es="Mensaje" data-en="Message">Mensaje</label>
-      <textarea id="ct-mensaje" name="mensaje"></textarea>
-      <label class="optin"><input type="checkbox" name="lista" checked> <span data-es="Quiero suscribirme a su lista de correo para recibir novedades, promociones y más." data-en="Sign up for our email list for updates, promotions, and more.">Quiero suscribirme a su lista de correo para recibir novedades, promociones y más.</span></label>
-      <button class="btn btn-accion" type="submit" data-es="Enviar" data-en="Send">Enviar</button>
-    </form>
-    <div class="gracias" id="graciasContacto" role="status">
-      <p data-es="¡Mensaje recibido! Te respondemos muy pronto." data-en="Message received! We will get back to you very soon.">¡Mensaje recibido! Te respondemos muy pronto.</p>
-    </div>
-  </div>
-</section>
 
 <!-- PIE -->
 <footer>
@@ -539,6 +526,17 @@ body{padding-bottom:58px}
   if(btnMM) btnMM.addEventListener('click',function(){ mostrarMenu(true); });
   document.querySelectorAll('a[href="#menus"]').forEach(function(a){ a.addEventListener('click',function(){ mostrarMenu(false); }); });
   if(location.hash==='#menus'){ mostrarMenu(false); }
+
+  // Contacto: no va en la página; se abre como ventana desde las barras
+  function mc(){ return document.getElementById('modalContacto'); }
+  function abrirContacto(){ var m=mc(); if(m){ m.hidden=false; document.body.style.overflow='hidden'; } }
+  function cerrarContactoFn(){ var m=mc(); if(m){ m.hidden=true; document.body.style.overflow=''; } }
+  document.addEventListener('click',function(e){ var a=e.target.closest('a[href="#contacto"]'); if(a){ e.preventDefault(); cerrarPanelSiAbierto(); abrirContacto(); } });
+  var btnCerrarC=document.getElementById('cerrarContacto');
+  if(btnCerrarC) btnCerrarC.addEventListener('click',cerrarContactoFn);
+  var mEl=mc(); if(mEl) mEl.addEventListener('click',function(e){ if(e.target===mEl) cerrarContactoFn(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') cerrarContactoFn(); });
+  function cerrarPanelSiAbierto(){ var p=document.getElementById('panelMovil'); if(p && p.classList.contains('abierto')){ p.classList.remove('abierto'); } }
   var tabs=document.querySelectorAll('.pestanas [role="tab"]');
   tabs.forEach(function(t){
     t.addEventListener('click', function(){
@@ -600,5 +598,32 @@ body{padding-bottom:58px}
   </div>
   <a class="btn-barra" href="#club" data-es="Club Rosario" data-en="Rosario Club">Club Rosario</a>
 </nav>
+
+<!-- CONTACTO: ventana que se abre desde las barras de menú -->
+<div class="modal-contacto" id="modalContacto" hidden>
+  <div class="modal-caja">
+    <button type="button" class="modal-x" id="cerrarContacto" aria-label="Cerrar / Close">×</button>
+<section class="seccion contacto" id="contacto">
+  <div class="contenedor">
+    <p class="sobre" data-es="Estamos para ti" data-en="We Are Here for You">Estamos para ti</p>
+    <h2 data-es="Contáctanos" data-en="Contact Us">Contáctanos</h2>
+    <p class="sub" data-es="¡Escríbenos!" data-en="Drop us a line!">¡Escríbenos!</p>
+    <form class="form-contacto" id="formContacto">
+      <label for="ct-nombre" data-es="Nombre" data-en="Name">Nombre</label>
+      <input type="text" id="ct-nombre" name="nombre" autocomplete="name">
+      <label for="ct-correo"><span data-es="Correo electrónico" data-en="Email">Correo electrónico</span> *</label>
+      <input type="email" id="ct-correo" name="correo" required autocomplete="email">
+      <label for="ct-mensaje" data-es="Mensaje" data-en="Message">Mensaje</label>
+      <textarea id="ct-mensaje" name="mensaje"></textarea>
+      <label class="optin"><input type="checkbox" name="lista" checked> <span data-es="Quiero suscribirme a su lista de correo para recibir novedades, promociones y más." data-en="Sign up for our email list for updates, promotions, and more.">Quiero suscribirme a su lista de correo para recibir novedades, promociones y más.</span></label>
+      <button class="btn btn-accion" type="submit" data-es="Enviar" data-en="Send">Enviar</button>
+    </form>
+    <div class="gracias" id="graciasContacto" role="status">
+      <p data-es="¡Mensaje recibido! Te respondemos muy pronto." data-en="Message received! We will get back to you very soon.">¡Mensaje recibido! Te respondemos muy pronto.</p>
+    </div>
+  </div>
+</section>
+  </div>
+</div>
 </body>
 </html>
