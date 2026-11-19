@@ -204,6 +204,13 @@ body{padding-bottom:58px}
   .nav .enlaces{margin-left:auto}
   .nav .enlaces a{white-space:nowrap}
 }
+
+/* ---------- Portada del menú: el menú no se muestra directo (estilo referente) ---------- */
+.portada-menu{text-align:center;padding:26px 0 6px}
+.portada-menu .sobre{color:var(--dorado-claro);letter-spacing:.34em;font-size:11px;font-weight:800;text-transform:uppercase;margin-bottom:20px}
+#cartaPanel{display:none}
+#cartaPanel.visible{display:block;animation:apareceCarta .6s ease}
+@keyframes apareceCarta{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 @media print{ .nav,.llamar-flotante{display:none} .hero{min-height:auto;padding:60px 24px} .hero h1{font-size:56px} }
 </style>
 </head>
@@ -246,7 +253,7 @@ body{padding-bottom:58px}
   <p class="lema" data-es="Cócteles de la casa, música y ambiente sobre Dale Mabry, en Tampa. Una nueva experiencia gastronómica está por abrir sus puertas." data-en="Signature cocktails, music and atmosphere on Dale Mabry, in Tampa. A new dining experience is about to open its doors.">Cócteles de la casa, música y ambiente sobre Dale Mabry, en Tampa. Una nueva experiencia gastronómica está por abrir sus puertas.</p>
   <div class="acciones">
     <a class="btn btn-accion" href="#reservas" data-es="Reservar mesa" data-en="Book a Table">Reservar mesa</a>
-    <a class="btn btn-claro" href="#menus" data-es="Ver los menús" data-en="View Menus">Ver los menús</a>
+    <a class="btn btn-claro" href="#menus" data-es="Mostrar menú" data-en="Show Menu">Mostrar menú</a>
   </div>
 </section>
 
@@ -273,7 +280,11 @@ body{padding-bottom:58px}
 
 <!-- MENÚS -->
 <section class="seccion carta-fondo" id="menus">
-  <div class="carta">
+  <div class="portada-menu" id="portadaMenu">
+    <p class="sobre" data-es="La carta" data-en="The Menus">La carta</p>
+    <button type="button" class="btn btn-claro" id="btnMostrarMenu" data-es="Mostrar menú" data-en="Show Menu">Mostrar menú</button>
+  </div>
+  <div class="carta" id="cartaPanel">
     <p class="sobre" data-es="La carta" data-en="The Menus">La carta</p>
     <h2 data-es="Menús" data-en="Menus">Menús</h2>
     <p class="sub" data-es="Cocina de fusión y cócteles de la casa" data-en="Fusion cuisine and signature cocktails">Cocina de fusión y cócteles de la casa</p>
@@ -513,6 +524,21 @@ body{padding-bottom:58px}
   window.addEventListener('scroll', alBajar, {passive:true}); alBajar();
 
   // Pestañas de menús
+
+  // El menú no se muestra directo: se abre con «Mostrar menú» (estilo del referente)
+  var cartaPanel=document.getElementById('cartaPanel');
+  var portadaMenu=document.getElementById('portadaMenu');
+  function mostrarMenu(desplazar){
+    if(!cartaPanel) return;
+    var yaVisible=cartaPanel.classList.contains('visible');
+    cartaPanel.classList.add('visible');
+    if(portadaMenu) portadaMenu.style.display='none';
+    if(desplazar && !yaVisible){ setTimeout(function(){ cartaPanel.scrollIntoView({behavior:'smooth',block:'start'}); },60); }
+  }
+  var btnMM=document.getElementById('btnMostrarMenu');
+  if(btnMM) btnMM.addEventListener('click',function(){ mostrarMenu(true); });
+  document.querySelectorAll('a[href="#menus"]').forEach(function(a){ a.addEventListener('click',function(){ mostrarMenu(false); }); });
+  if(location.hash==='#menus'){ mostrarMenu(false); }
   var tabs=document.querySelectorAll('.pestanas [role="tab"]');
   tabs.forEach(function(t){
     t.addEventListener('click', function(){
