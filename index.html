@@ -53,6 +53,25 @@ h1,h2{font-family:var(--serif);font-weight:600;line-height:1.08}
 .btn-accion:hover{background:#9A773F;color:#fff}
 .btn-claro{border-color:var(--crema);color:#fff}
 .idioma{background:none;border:1px solid rgba(244,236,220,.5);color:var(--crema);font:inherit;font-size:11px;font-weight:800;letter-spacing:.18em;padding:8px 12px;border-radius:2px;cursor:pointer}
+
+/* ---------- Menú móvil (hamburguesa) ---------- */
+.hamb{display:none;background:none;border:1px solid rgba(244,236,220,.5);border-radius:2px;width:46px;height:42px;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:6px;flex:none}
+.hamb span{display:block;width:22px;height:2px;background:var(--crema)}
+.panel-movil{display:none;flex-basis:100%;background:var(--noche);border-bottom:1px solid rgba(176,138,79,.4);padding:10px 0 16px}
+.panel-movil a{display:block;text-decoration:none;padding:13px 24px;font-size:13px;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:var(--crema)}
+.panel-movil a:active{color:var(--dorado-claro)}
+.panel-movil .idioma-movil{padding:10px 24px 2px;color:#CBBd97;font-size:13px;letter-spacing:.2em}
+.panel-movil .idioma-movil button{background:none;border:none;color:inherit;font:inherit;cursor:pointer;padding:6px 10px 6px 0}
+.panel-movil .idioma-movil button.activo{color:var(--dorado-claro);text-decoration:underline}
+@media (max-width:900px){
+  .hamb{display:flex}
+  .panel-movil.abierto{display:block}
+  .nav{flex-wrap:wrap}
+  .nav #btnIdioma{display:none}
+  .nav .marca .nombre{display:none}
+  .hamb{margin-left:auto}
+  .nav .enlaces .btn{padding:11px 16px;font-size:11px}
+}
 @media (max-width:900px){ .nav .enlaces a:not(.btn){display:none} .nav{padding:14px 16px} }
 
 /* ---------- Hero ---------- */
@@ -175,6 +194,17 @@ footer a:hover{color:var(--dorado-claro)}
     <a href="#contacto" data-es="Contacto" data-en="Contact">Contacto</a>
     <a class="btn btn-accion" href="#reservas" data-es="Reservar" data-en="Book a Table">Reservar</a>
     <button class="idioma" id="btnIdioma" type="button" aria-label="Cambiar idioma / Switch language">EN</button>
+  </nav>
+  <button class="hamb" id="hamb" type="button" aria-label="Menú" aria-expanded="false" aria-controls="panelMovil"><span></span><span></span><span></span></button>
+  <nav class="panel-movil" id="panelMovil">
+    <a href="#inicio" data-es="Inicio" data-en="Home">Inicio</a>
+    <a href="#horario" data-es="Horario y ubicación" data-en="Hours &amp; Location">Horario y ubicación</a>
+    <a href="#menus" data-es="Menús" data-en="Menus">Menús</a>
+    <a href="#reservas" data-es="Reservas" data-en="Reservations">Reservas</a>
+    <a href="#eventos" data-es="Eventos" data-en="Events">Eventos</a>
+    <a href="#club" data-es="Club" data-en="Club">Club</a>
+    <a href="#contacto" data-es="Contacto" data-en="Contact">Contacto</a>
+    <p class="idioma-movil"><button type="button" id="btnIdiomaMovil">EN</button></p>
   </nav>
 </header>
 
@@ -424,12 +454,23 @@ footer a:hover{color:var(--dorado-claro)}
     lang=l; localStorage.setItem('rosario-lang',l);
     document.documentElement.lang=l;
     btn.textContent = l==='es' ? 'EN' : 'ES';
+    var bm=document.getElementById('btnIdiomaMovil'); if(bm){ bm.textContent = l==='es' ? 'EN' : 'ES'; }
     document.querySelectorAll('[data-es]').forEach(function(el){
       var v = l==='es' ? el.getAttribute('data-es') : el.getAttribute('data-en');
       if(v!==null){ el.innerHTML=v; }
     });
   }
   btn.addEventListener('click', function(){ setLang(lang==='es'?'en':'es'); });
+  var btnM=document.getElementById('btnIdiomaMovil');
+  if(btnM){ btnM.addEventListener('click', function(){ setLang(lang==='es'?'en':'es'); }); }
+  var hamb=document.getElementById('hamb'), panel=document.getElementById('panelMovil');
+  if(hamb&&panel){
+    hamb.addEventListener('click', function(){
+      var abierto=panel.classList.toggle('abierto');
+      hamb.setAttribute('aria-expanded', abierto?'true':'false');
+    });
+    panel.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ panel.classList.remove('abierto'); hamb.setAttribute('aria-expanded','false'); }); });
+  }
   if(lang!=='es'){ setLang(lang); }
 })();
 </script>
