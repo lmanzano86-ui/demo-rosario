@@ -177,15 +177,26 @@ footer a:hover{color:var(--dorado-claro)}
 .creditos{max-width:1080px;margin:44px auto 0;padding-top:20px;border-top:1px solid rgba(176,138,79,.25);font-size:12.5px;color:#8d7c5f;text-align:center}
 .llamar-flotante{position:fixed;right:18px;bottom:18px;z-index:55;background:var(--dorado);color:#fff;text-decoration:none;font-weight:800;font-size:13px;letter-spacing:.08em;padding:14px 20px;border-radius:999px;box-shadow:0 10px 26px rgba(0,0,0,.45)}
 
-/* ---------- Barra de menú inferior (móvil) ---------- */
-.barra-inferior{display:none}
+/* ---------- Barra inferior fija (como la del referente) ---------- */
+.barra-inferior{display:flex;align-items:center;gap:18px;position:fixed;left:0;right:0;bottom:0;z-index:58;background:#26221F;border-top:1px solid rgba(244,236,220,.16);padding:10px 20px calc(10px + env(safe-area-inset-bottom))}
+.barra-inferior .social{display:flex;gap:10px;flex:none}
+.barra-inferior .social a{width:34px;height:34px;border:1.5px solid #F4ECDC;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#F4ECDC;text-decoration:none;font-family:var(--serif);font-size:13px}
+.barra-inferior .social a svg{width:17px;height:17px;stroke:#F4ECDC;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.barra-inferior .enlaces-barra{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;flex:1}
+.barra-inferior .enlaces-barra a{color:#EFE6D2;text-decoration:none;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;white-space:nowrap}
+.barra-inferior .enlaces-barra a:hover{color:var(--dorado-claro)}
+.barra-inferior .btn-barra{flex:none;border:1px solid var(--dorado);color:var(--crema);text-decoration:none;font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;padding:10px 16px;white-space:nowrap}
+.barra-inferior .btn-barra:hover{background:var(--dorado);color:#fff}
+body{padding-bottom:58px}
+.llamar-flotante{bottom:76px}
 @media (max-width:900px){
   .llamar-flotante{display:none}
-  .barra-inferior{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:58;background:#26221F;border-top:1px solid rgba(244,236,220,.16);padding:6px 2px calc(6px + env(safe-area-inset-bottom))}
-  .barra-inferior a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px;text-decoration:none;color:#D9CCAF;font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
-  .barra-inferior a svg{width:21px;height:21px;stroke:var(--dorado-claro);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-  .barra-inferior a:active{color:#fff}
-  body{padding-bottom:64px}
+  .barra-inferior{gap:10px;padding:8px 10px calc(8px + env(safe-area-inset-bottom))}
+  .barra-inferior .enlaces-barra{gap:12px}
+  .barra-inferior .enlaces-barra a{font-size:9.5px;letter-spacing:.1em}
+  .barra-inferior .btn-barra{font-size:9.5px;padding:8px 10px;letter-spacing:.12em}
+  .barra-inferior .social a{width:29px;height:29px}
+  body{padding-bottom:98px}
 }
 @media print{ .nav,.llamar-flotante{display:none} .hero{min-height:auto;padding:60px 24px} .hero h1{font-size:56px} }
 </style>
@@ -543,12 +554,19 @@ footer a:hover{color:var(--dorado-claro)}
 })();
 </script>
 
-<!-- BARRA DE MENÚ INFERIOR (MÓVIL) -->
-<nav class="barra-inferior" aria-label="Menú inferior">
-  <a href="#menus"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h10"/></svg><span data-es="Menús" data-en="Menus">Menús</span></a>
-  <a href="#reservas"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg><span data-es="Reservar" data-en="Reserve">Reservar</span></a>
-  <a href="tel:+18132845154"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg><span data-es="Llamar" data-en="Call">Llamar</span></a>
-  <a href="https://maps.app.goo.gl/meVKJqDnpMzcXSnp9" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg><span data-es="Cómo llegar" data-en="Directions">Cómo llegar</span></a>
+<!-- BARRA INFERIOR FIJA -->
+<nav class="barra-inferior" aria-label="Barra inferior">
+  <div class="social">
+    <a href="https://www.instagram.com/rosariotampa" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="#F4ECDC"/></svg></a>
+    <a href="https://maps.app.goo.gl/meVKJqDnpMzcXSnp9" target="_blank" rel="noopener" aria-label="Google">G</a>
+  </div>
+  <div class="enlaces-barra">
+    <a href="#contacto" data-es="Contacto" data-en="Contact">Contacto</a>
+    <a href="#club" data-es="Club Rosario" data-en="Rosario Club">Club Rosario</a>
+    <a href="https://lmanzano86-ui.github.io/mesaready-demo/" target="_blank" rel="noopener" data-es="Ordenar en línea" data-en="Order Online">Ordenar en línea</a>
+    <a href="tel:+18132845154" data-es="Llamar" data-en="Call">Llamar</a>
+  </div>
+  <a class="btn-barra" href="#club" data-es="Club Rosario" data-en="Rosario Club">Club Rosario</a>
 </nav>
 </body>
 </html>
