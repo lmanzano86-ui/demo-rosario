@@ -213,6 +213,25 @@ body{padding-bottom:82px}
   .nav .enlaces a{white-space:nowrap}
 }
 
+
+/* ---------- Especiales y eventos leídos de MesaReady («Mi página») ---------- */
+#especiales{text-align:center}
+#especiales h2{font-size:clamp(30px,5vw,44px);color:#fff}
+.especiales-lista{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,330px));justify-content:center;gap:22px;max-width:1020px;margin:36px auto 0;text-align:left}
+.tarjeta-esp{background:#241610;border:1px solid rgba(176,138,79,.35)}
+.tarjeta-esp img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block}
+.tarjeta-esp .cuerpo{padding:18px 20px 20px}
+.tarjeta-esp .etiqueta{display:inline-block;border:1px solid var(--dorado);color:var(--dorado-claro);font-size:10.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;padding:4px 9px;margin-bottom:10px}
+.tarjeta-esp h3{font-family:var(--serif);font-size:24px;color:#fff;font-weight:600;margin-bottom:6px}
+.tarjeta-esp p{color:#D9CCAF;font-size:15px;line-height:1.55}
+.eventos-lista{max-width:880px;margin:44px auto 0;text-align:left}
+.eventos-lista h3{font-family:var(--serif);font-size:28px;color:var(--dorado-claro);text-align:center;font-weight:600;margin-bottom:22px}
+.tarjeta-ev{display:flex;gap:18px;background:#241610;border:1px solid rgba(176,138,79,.35);padding:16px;margin-bottom:14px;align-items:flex-start}
+.tarjeta-ev img{width:150px;aspect-ratio:3/2;object-fit:cover;flex:none}
+.tarjeta-ev .fecha{font-family:var(--serif);color:var(--dorado-claro);font-size:17px;text-transform:capitalize}
+.tarjeta-ev h4{color:#fff;font-size:18px;margin:3px 0 5px}
+.tarjeta-ev p{color:#D9CCAF;font-size:14.5px;line-height:1.5}
+@media (max-width:640px){ .tarjeta-ev{flex-direction:column} .tarjeta-ev img{width:100%} }
 /* ---------- Portada del menú: el menú no se muestra directo (estilo referente) ---------- */
 .portada-menu{text-align:center;padding:26px 0 6px}
 .portada-menu .sobre{color:var(--dorado-claro);letter-spacing:.34em;font-size:11px;font-weight:800;text-transform:uppercase;margin-bottom:20px}
@@ -300,6 +319,14 @@ body{padding-bottom:82px}
 </section>
 
 <!-- MENÚS -->
+
+<!-- ESPECIALES: se llena sola desde MesaReady cuando el negocio publica especiales -->
+<section class="seccion" id="especiales" hidden>
+  <p class="sobre" data-es="Novedades de la casa" data-en="From the House">Novedades de la casa</p>
+  <h2 data-es="Especiales" data-en="Specials">Especiales</h2>
+  <div class="especiales-lista" id="especialesLista"></div>
+</section>
+
 <section class="seccion carta-fondo" id="menus">
   <div class="portada-menu" id="portadaMenu">
     <p class="sobre" data-es="La carta" data-en="The Menus">La carta</p>
@@ -441,6 +468,11 @@ body{padding-bottom:82px}
       <p data-es="Un salón con arcos de luz y una cocina de fusión para tus celebraciones: cumpleaños, cenas de empresa y momentos que merecen escenario." data-en="A room with arches of light and fusion cuisine for your celebrations: birthdays, company dinners and moments that deserve a stage.">Un salón con arcos de luz y una cocina de fusión para tus celebraciones: cumpleaños, cenas de empresa y momentos que merecen escenario.</p>
       <a class="btn" href="tel:+18132845154" data-es="Preguntar por tu evento" data-en="Ask About Your Event">Preguntar por tu evento</a>
     </div>
+  </div>
+
+  <div class="eventos-lista" id="eventosLista" hidden>
+    <h3 data-es="Próximos eventos" data-en="Upcoming Events">Próximos eventos</h3>
+    <div id="eventosItems"></div>
   </div>
 </section>
 
@@ -664,5 +696,116 @@ body{padding-bottom:82px}
 </section>
   </div>
 </div>
+
+<!-- CONEXIÓN CON MESAREADY: la carta, los especiales y los eventos se leen de la fuente pública del negocio -->
+<script>
+(function(){
+  var FUENTE='https://mesaready.newageprosystem.com/api/pub/rosario/config';
+  function el(tag, cls, texto){ var e=document.createElement(tag); if(cls) e.className=cls; if(texto!=null) e.textContent=texto; return e; }
+  function precio(p){ p=+p||0; return '$' + (Number.isInteger(p) ? p : p.toFixed(2)); }
+  function slug(t){ var m={'cena':'cena','cócteles':'cocteles','cocteles':'cocteles','happy hour':'happy','brunch':'brunch','postres':'postres'}; var k=t.toLowerCase().trim(); return m[k] || k.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-'); }
+
+  function pintarMenu(items){
+    var carta=document.getElementById('cartaPanel'); if(!carta) return;
+    var pestanas=carta.querySelector('.pestanas'); if(!pestanas) return;
+    // Agrupar por «Servicio · Subsección», en el orden en que llegan
+    var orden=[], grupos={};
+    items.forEach(function(it){
+      var partes=String(it.category||'Menú').split('·').map(function(x){return x.trim();});
+      var tab=partes[0]||'Menú', sub=partes[1]||'';
+      if(!grupos[tab]){ grupos[tab]={}; orden.push(tab); }
+      if(!grupos[tab][sub]) grupos[tab][sub]=[];
+      grupos[tab][sub].push(it);
+    });
+    // Borrar pestañas y paneles actuales (quedan de respaldo solo si la fuente falla)
+    pestanas.innerHTML='';
+    carta.querySelectorAll('.panel-menu').forEach(function(p){ p.remove(); });
+    var nota=carta.querySelector('.nota-muestra');
+    orden.forEach(function(tab, idx){
+      var id='panel-' + slug(tab);
+      var b=el('button', null, tab);
+      b.setAttribute('role','tab'); b.setAttribute('data-panel', slug(tab));
+      b.setAttribute('aria-selected', idx===0 ? 'true' : 'false');
+      pestanas.appendChild(b);
+      var panel=el('div','panel-menu' + (idx===0 ? ' activo' : ''));
+      panel.id=id; panel.setAttribute('role','tabpanel');
+      Object.keys(grupos[tab]).forEach(function(sub){
+        if(sub) panel.appendChild(el('h3', null, sub));
+        var rejilla=el('div','rejilla-menu');
+        grupos[tab][sub].forEach(function(it){
+          var plato=el('div','plato');
+          plato.appendChild(el('p','nombre', it.name));
+          if(it.description){
+            var desc=el('p','desc');
+            String(it.description).split('·').map(function(x){return x.trim();}).filter(Boolean).forEach(function(troz, i){
+              if(i>0) desc.appendChild(el('i', null, '✦'));
+              desc.appendChild(el('span', null, troz));
+            });
+            plato.appendChild(desc);
+          }
+          var pr=(it.sizes && it.sizes[0]) ? it.sizes[0].price : it.price;
+          if(pr!=null && pr!=='') plato.appendChild(el('p','precio', precio(pr)));
+          rejilla.appendChild(plato);
+        });
+        panel.appendChild(rejilla);
+      });
+      if(nota) carta.insertBefore(panel, nota); else carta.appendChild(panel);
+    });
+    // Las pestañas nuevas responden al clic igual que las de siempre
+    pestanas.querySelectorAll('[role="tab"]').forEach(function(t){
+      t.addEventListener('click', function(){
+        pestanas.querySelectorAll('[role="tab"]').forEach(function(x){ x.setAttribute('aria-selected','false'); });
+        t.setAttribute('aria-selected','true');
+        carta.querySelectorAll('.panel-menu').forEach(function(p){ p.classList.remove('activo'); });
+        var destino=document.getElementById('panel-' + t.getAttribute('data-panel'));
+        if(destino) destino.classList.add('activo');
+      });
+    });
+  }
+
+  function pintarEspeciales(lista){
+    var sec=document.getElementById('especiales'), caja=document.getElementById('especialesLista');
+    if(!sec || !caja) return;
+    lista.forEach(function(sp){
+      var card=el('article','tarjeta-esp');
+      if(sp.image){ var im=el('img'); im.src=sp.image; im.alt=sp.title||''; im.loading='lazy'; card.appendChild(im); }
+      var cuerpo=el('div','cuerpo');
+      if(sp.tag) cuerpo.appendChild(el('span','etiqueta', sp.tag));
+      cuerpo.appendChild(el('h3', null, sp.title));
+      if(sp.description) cuerpo.appendChild(el('p', null, sp.description));
+      card.appendChild(cuerpo); caja.appendChild(card);
+    });
+    sec.hidden=false;
+  }
+
+  function pintarEventos(lista){
+    var wrap=document.getElementById('eventosLista'), caja=document.getElementById('eventosItems');
+    if(!wrap || !caja) return;
+    var idioma=document.documentElement.lang==='en' ? 'en-US' : 'es-US';
+    lista.forEach(function(ev){
+      var card=el('article','tarjeta-ev');
+      if(ev.image){ var im=el('img'); im.src=ev.image; im.alt=ev.title||''; im.loading='lazy'; card.appendChild(im); }
+      var cuerpo=el('div');
+      var fechaTxt='';
+      if(ev.date){ try{ fechaTxt=new Date(ev.date+'T12:00:00').toLocaleDateString(idioma,{weekday:'long',day:'numeric',month:'long'}); if(idioma==='es-US'){ fechaTxt=fechaTxt.toLowerCase(); fechaTxt=fechaTxt.charAt(0).toUpperCase()+fechaTxt.slice(1); } }catch(e){ fechaTxt=ev.date; } }
+      if(ev.time) fechaTxt += (fechaTxt ? ' · ' : '') + ev.time;
+      if(fechaTxt) cuerpo.appendChild(el('p','fecha', fechaTxt));
+      cuerpo.appendChild(el('h4', null, ev.title));
+      if(ev.description) cuerpo.appendChild(el('p', null, ev.description));
+      card.appendChild(cuerpo); caja.appendChild(card);
+    });
+    wrap.hidden=false;
+  }
+
+  fetch(FUENTE, {headers:{'Accept':'application/json'}})
+    .then(function(r){ if(!r.ok) throw new Error('fuente'); return r.json(); })
+    .then(function(cfg){
+      if(cfg.menu && cfg.menu.length) pintarMenu(cfg.menu);
+      if(cfg.specials && cfg.specials.length) pintarEspeciales(cfg.specials);
+      if(cfg.events && cfg.events.length) pintarEventos(cfg.events);
+    })
+    .catch(function(){ /* Sin conexión con la fuente, la página conserva su contenido de muestra. */ });
+})();
+</script>
 </body>
 </html>
