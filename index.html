@@ -214,6 +214,35 @@ body{padding-bottom:82px}
 }
 
 
+/* ---------- Nosotros: acordeón de dueños con el contorno de Rosario ---------- */
+.nosotros{background:var(--noche)}
+.nosotros h2{font-size:42px;font-size:clamp(32px,5vw,44px);text-align:center;margin:8px 0 10px}
+.nosotros .intro{max-width:620px;margin:0 auto 38px;text-align:center;color:var(--gris)}
+.acordeon-duenos{display:flex;gap:14px;max-width:1040px;margin:0 auto;height:470px}
+.dueno{position:relative;flex:1 1 0;min-width:0;border:1px solid var(--dorado);border-radius:235px 235px 6px 6px;background:var(--noche-2);cursor:pointer;overflow:hidden;transition:flex-grow .55s ease;padding:0}
+.dueno::before{content:"";position:absolute;inset:9px;border:1px solid rgba(201,168,106,.55);border-radius:224px 224px 3px 3px;pointer-events:none;z-index:3}
+.dueno .retrato{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 30%,#3A281B 0%,var(--noche-2) 62%,var(--noche) 100%)}
+.dueno .retrato svg{width:46%;max-width:150px;height:auto;opacity:.9}
+.dueno:not(.activo) .retrato svg{opacity:.22}
+.dueno .nombre-vertical{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-family:var(--serif);font-size:21px;letter-spacing:.28em;text-transform:uppercase;color:var(--dorado-claro);background:rgba(29,19,12,.45);opacity:1;transition:opacity .3s ease;z-index:2}
+.dueno.activo{flex-grow:3.1;cursor:default}
+.dueno.activo .nombre-vertical{opacity:0}
+.dueno .ficha-dueno{position:absolute;left:0;right:0;bottom:0;background:var(--crema);color:var(--tinta);text-align:center;padding:16px 14px 18px;opacity:0;transform:translateY(10px);transition:opacity .35s ease,transform .35s ease;z-index:2}
+.dueno.activo .ficha-dueno{opacity:1;transform:translateY(0)}
+.dueno .ficha-dueno .rol{font-size:10.5px;font-weight:800;letter-spacing:.26em;text-transform:uppercase;color:#8a6a38;margin-bottom:2px}
+.dueno .ficha-dueno h3{font-family:var(--serif);font-size:25px;font-weight:600;color:var(--noche-2);line-height:1.15}
+.dueno .ficha-dueno .pendiente{font-size:12.5px;font-style:italic;color:#6d573c;margin-top:2px}
+.nosotros .nota-muestra{text-align:center;margin-top:20px}
+@media (max-width:760px){
+  .acordeon-duenos{flex-direction:column;height:auto}
+  .dueno{flex:none;height:104px;border-radius:120px 120px 6px 6px;transition:height .5s ease}
+  .dueno::before{border-radius:110px 110px 3px 3px}
+  .dueno.activo{height:320px}
+  .dueno .nombre-vertical{writing-mode:horizontal-tb;font-size:18px}
+  .dueno .retrato svg{max-width:110px}
+}
+@media (prefers-reduced-motion: reduce){ .dueno,.dueno .ficha-dueno,.dueno .nombre-vertical{transition:none} }
+
 /* ---------- Especiales y eventos leídos de MesaReady («Mi página») ---------- */
 #especiales{text-align:center}
 #especiales h2{font-size:clamp(30px,5vw,44px);color:#fff}
@@ -264,6 +293,7 @@ body{padding-bottom:82px}
   <nav class="enlaces">
     <a href="#horario" data-es="Horario y ubicación" data-en="Hours &amp; Location">Horario y ubicación</a>
     <a href="#menus" data-es="Menús" data-en="Menus">Menús</a>
+    <a href="#nosotros" data-es="Nosotros" data-en="About Us">Nosotros</a>
     <a href="#eventos" data-es="Eventos" data-en="Events">Eventos</a>
     <a href="#club" data-es="Club" data-en="Club">Club</a>
     <a href="#contacto" data-es="Contacto" data-en="Contact">Contacto</a>
@@ -275,6 +305,7 @@ body{padding-bottom:82px}
     <a href="#inicio" data-es="Inicio" data-en="Home">Inicio</a>
     <a href="#horario" data-es="Horario y ubicación" data-en="Hours &amp; Location">Horario y ubicación</a>
     <a href="#menus" data-es="Menús" data-en="Menus">Menús</a>
+    <a href="#nosotros" data-es="Nosotros" data-en="About Us">Nosotros</a>
     <a href="#reservas" data-es="Reservas" data-en="Reservations">Reservas</a>
     <a href="#eventos" data-es="Eventos" data-en="Events">Eventos</a>
     <a href="#club" data-es="Club" data-en="Club">Club</a>
@@ -484,6 +515,52 @@ body{padding-bottom:82px}
   <a class="btn btn-accion" href="#lista" data-es="Quiero ser de los primeros" data-en="Join First">Quiero ser de los primeros</a>
 </section>
 
+<!-- NOSOTROS: la historia de Rosario y sus dueños (acordeón con el contorno de la casa) -->
+<section class="seccion nosotros" id="nosotros">
+  <p class="sobre" data-es="Nosotros" data-en="About Us">Nosotros</p>
+  <h2 data-es="La historia de Rosario" data-en="The Story of Rosario">La historia de Rosario</h2>
+  <p class="intro" data-es="Detrás de Rosario hay cuatro dueños con una misma idea: una mesa de fusión latina moderna en Tampa. Su historia, contada por ellos mismos, se presentará en esta sección junto a sus retratos." data-en="Behind Rosario are four owners with one shared idea: a modern Latin fusion table in Tampa. Their story, told in their own words, will be presented in this section alongside their portraits.">Detrás de Rosario hay cuatro dueños con una misma idea: una mesa de fusión latina moderna en Tampa. Su historia, contada por ellos mismos, se presentará en esta sección junto a sus retratos.</p>
+  <div class="acordeon-duenos" id="acordeonDuenos">
+    <article class="dueno activo" tabindex="0" role="button" aria-expanded="true" aria-label="Dueño 1 / Owner 1">
+      <div class="retrato" aria-hidden="true"><svg viewBox="0 0 100 100" fill="none" stroke="#C9A86A" stroke-width="2"><circle cx="50" cy="36" r="15"/><path d="M20 90c5-18 16-27 30-27s25 9 30 27"/></svg></div>
+      <p class="nombre-vertical" data-es="Dueño 1" data-en="Owner 1">Dueño 1</p>
+      <div class="ficha-dueno">
+        <p class="rol" data-es="Dueño de Rosario" data-en="Owner of Rosario">Dueño de Rosario</p>
+        <h3 data-es="Nombre por confirmar" data-en="Name to Be Confirmed">Nombre por confirmar</h3>
+        <p class="pendiente" data-es="Foto pendiente de entrega" data-en="Photo to be provided">Foto pendiente de entrega</p>
+      </div>
+    </article>
+    <article class="dueno" tabindex="0" role="button" aria-expanded="false" aria-label="Dueño 2 / Owner 2">
+      <div class="retrato" aria-hidden="true"><svg viewBox="0 0 100 100" fill="none" stroke="#C9A86A" stroke-width="2"><circle cx="50" cy="36" r="15"/><path d="M20 90c5-18 16-27 30-27s25 9 30 27"/></svg></div>
+      <p class="nombre-vertical" data-es="Dueño 2" data-en="Owner 2">Dueño 2</p>
+      <div class="ficha-dueno">
+        <p class="rol" data-es="Dueño de Rosario" data-en="Owner of Rosario">Dueño de Rosario</p>
+        <h3 data-es="Nombre por confirmar" data-en="Name to Be Confirmed">Nombre por confirmar</h3>
+        <p class="pendiente" data-es="Foto pendiente de entrega" data-en="Photo to be provided">Foto pendiente de entrega</p>
+      </div>
+    </article>
+    <article class="dueno" tabindex="0" role="button" aria-expanded="false" aria-label="Dueño 3 / Owner 3">
+      <div class="retrato" aria-hidden="true"><svg viewBox="0 0 100 100" fill="none" stroke="#C9A86A" stroke-width="2"><circle cx="50" cy="36" r="15"/><path d="M20 90c5-18 16-27 30-27s25 9 30 27"/></svg></div>
+      <p class="nombre-vertical" data-es="Dueño 3" data-en="Owner 3">Dueño 3</p>
+      <div class="ficha-dueno">
+        <p class="rol" data-es="Dueño de Rosario" data-en="Owner of Rosario">Dueño de Rosario</p>
+        <h3 data-es="Nombre por confirmar" data-en="Name to Be Confirmed">Nombre por confirmar</h3>
+        <p class="pendiente" data-es="Foto pendiente de entrega" data-en="Photo to be provided">Foto pendiente de entrega</p>
+      </div>
+    </article>
+    <article class="dueno" tabindex="0" role="button" aria-expanded="false" aria-label="Dueño 4 / Owner 4">
+      <div class="retrato" aria-hidden="true"><svg viewBox="0 0 100 100" fill="none" stroke="#C9A86A" stroke-width="2"><circle cx="50" cy="36" r="15"/><path d="M20 90c5-18 16-27 30-27s25 9 30 27"/></svg></div>
+      <p class="nombre-vertical" data-es="Dueño 4" data-en="Owner 4">Dueño 4</p>
+      <div class="ficha-dueno">
+        <p class="rol" data-es="Dueño de Rosario" data-en="Owner of Rosario">Dueño de Rosario</p>
+        <h3 data-es="Nombre por confirmar" data-en="Name to Be Confirmed">Nombre por confirmar</h3>
+        <p class="pendiente" data-es="Foto pendiente de entrega" data-en="Photo to be provided">Foto pendiente de entrega</p>
+      </div>
+    </article>
+  </div>
+  <p class="nota-muestra" data-es="Retratos y nombres de muestra: se sustituyen por los de los dueños cuando el negocio los entregue." data-en="Sample portraits and names: they will be replaced with the owners' own when the business provides them.">Retratos y nombres de muestra: se sustituyen por los de los dueños cuando el negocio los entregue.</p>
+</section>
+
 <!-- LISTA DE APERTURA -->
 <section class="seccion lista" id="lista">
   <div class="contenedor">
@@ -565,7 +642,7 @@ body{padding-bottom:82px}
     var observador=new IntersectionObserver(function(entradas){
       entradas.forEach(function(en){ if(en.isIntersecting){ marcarActiva('#'+en.target.id); } });
     },{rootMargin:'-40% 0px -55% 0px'});
-    ['horario','menus','eventos','club','lista'].forEach(function(id){
+    ['horario','menus','nosotros','eventos','club','lista'].forEach(function(id){
       var sec=document.getElementById(id); if(sec) observador.observe(sec);
     });
   }
@@ -805,6 +882,28 @@ body{padding-bottom:82px}
       if(cfg.events && cfg.events.length) pintarEventos(cfg.events);
     })
     .catch(function(){ /* Sin conexión con la fuente, la página conserva su contenido de muestra. */ });
+})();
+</script>
+<script>
+// Acordeón de dueños (Nosotros): un panel abierto a la vez; toque, clic, teclado o cursor
+(function(){
+  var caja=document.getElementById('acordeonDuenos');
+  if(!caja) return;
+  var paneles=Array.prototype.slice.call(caja.querySelectorAll('.dueno'));
+  function abrir(panel){
+    paneles.forEach(function(p){
+      var es=p===panel;
+      p.classList.toggle('activo', es);
+      p.setAttribute('aria-expanded', es ? 'true' : 'false');
+    });
+  }
+  paneles.forEach(function(p){
+    p.addEventListener('click', function(){ abrir(p); });
+    p.addEventListener('keydown', function(e){ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); abrir(p); } });
+  });
+  if(window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+    paneles.forEach(function(p){ p.addEventListener('mouseenter', function(){ abrir(p); }); });
+  }
 })();
 </script>
 </body>
